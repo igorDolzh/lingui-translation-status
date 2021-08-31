@@ -1,0 +1,16 @@
+name: Lingui translation status
+description: "Checks what translations are missing in the current PR"
+branding:
+  icon: arrow-up-circle
+  color: purple
+inputs:
+  format:
+    description: Format of the files with messages
+    required: true
+  file-path:
+    description: The file path to find language files
+    required: true
+
+runs:
+  using: "node12"
+  main: "lib/main.js"

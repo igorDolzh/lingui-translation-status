@@ -1,0 +1,23 @@
+{
+  "name": "lingui-translation-status",
+  "version": "0.0.1",
+  "description": "",
+  "main": "lib/main.js",
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@actions/core": "^1.4.0",
+    "@octokit/app": "^4.1.0",
+    "@octokit/rest": "^16.28.7",
+    "https": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^16.4.13",
+    "path": "^0.12.7",
+    "typescript": "^4.3.5"
+  }
+}
