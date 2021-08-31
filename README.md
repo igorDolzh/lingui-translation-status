@@ -1,11 +1,11 @@
-# localise-pull-messages
+# lingui-translation-status
 
-Lets you automatically pull messages from your localise.co project to your repository
+Checks what translations are missing in the current PR
 
 ## How to use
 
 ```yaml
-name: localise-pull-messages
+name: lingui-translation-status
 
 on:
   push:
@@ -21,18 +21,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: igorDolzh/localise-pull-messages@v0.0.6
+      - uses: igorDolzh/lingui-translation-status@v0.0.1
         with:
           # Api token for the Lokalise account
           # with read/write access to the project
-          api-token: ${{ secrets.LOCALIZE_TOKEN }}
-
-          # ID of the project to sync
-          project-id: project-id
+          format: json
 
           # The relative file path where language files will be found
           file-path: src/locales/%LANG_ISO%/messages.po
-
-          # Download options for https://app.lokalise.com/api2docs/curl/#transition-download-files-post
-          download-options: '{"export_empty_as": 'skip'}'
 ```
