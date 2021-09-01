@@ -9,8 +9,24 @@ inputs:
     required: true
   file-path:
     description: The file path to find language files
+  github-token:
+    description: Github token
     required: true
-
+  github-owner:
+    description: Github owner
+    required: true
+  github-repo:
+    description: Github repo
+    required: true
+  sha-base:
+    description: SHA Base
+    required: true
+  sha-head:
+    description: SHA Head
+    required: true
+  pull-number:
+    description: Pull request number
+    required: true
 runs:
   using: "node12"
   main: "lib/main.js"
