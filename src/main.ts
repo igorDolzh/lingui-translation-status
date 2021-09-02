@@ -1,7 +1,7 @@
 import * as ghCore from "@actions/core";
 import {Octokit} from '@octokit/rest'
 
-// const filePath = ghCore.getInput("file-path");
+const filePath = ghCore.getInput("file-path");
 const format = ghCore.getInput("format");
 const githubToken = ghCore.getInput("github-token");
 const githubOwner = ghCore.getInput("github-owner");
@@ -9,7 +9,26 @@ const githubRepo = ghCore.getInput("github-repo");
 const shaBase = ghCore.getInput("sha-base");
 const shaHead = ghCore.getInput("sha-head");
 const pullNumber = ghCore.getInput("pull-number");
+const langs =ghCore.getInput("file-langs");
 
+const LANG_ISO_PLACEHOLDER = "%LANG_ISO%";
+
+const languageStyledMap: {[key: string]: string} = {
+    en: 'English',
+    es: 'Spanish',
+    fr: 'French',
+    sv: 'Swedish',
+    da: 'Danish',
+    de: 'German'
+}
+function getLanguage(fileName: string, langs: string[]) {
+    const language = langs.find((lang) => fileName.includes(lang))
+    if (language) {
+        const languageStyled = languageStyledMap[language]
+        return languageStyled
+    }
+
+}
 function getPattern(format: string) {
     if (format === 'po') {
         return /\+msgid "([\w ]*)".*\n\+msgstr.""/
@@ -28,6 +47,8 @@ async function run() {
         base: shaBase,
         head: shaHead
     })
+    const parsedLangs = JSON.parse(langs)
+    const langFiles = parsedLangs.map((lang: string) => filePath.replace(LANG_ISO_PLACEHOLDER, lang))
 
     function getMessages(source: string) {
         const pattern = getPattern(format)
@@ -47,7 +68,7 @@ async function run() {
     }
     if (result) {
         console.log('result', {
-            result: result?.data?.files?.map((fileData) => ({
+            result: result?.data?.files?.filter((fileData) => langFiles.includes(fileData.filename)).map((fileData) => ({
                 fileName: fileData.filename,
                 messages: getMessages(fileData?.patch || '')
             }))
@@ -59,7 +80,7 @@ async function run() {
         }))
 
         const messagesToPrint = messages?.map(({ fileName, messages}) => {
-            const title = `| ${fileName} |\n| --- |\n`
+            const title = `| ${getLanguage(fileName, parsedLangs) || 'Unknown language'} |\n| --- |\n`
             let content: string[] = []
             messages?.forEach((message) => {
                 content.push(`| ${message} |`)
