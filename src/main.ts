@@ -24,10 +24,10 @@ const languageStyledMap: {[key: string]: string} = {
 function getLanguage(fileName: string, langs: string[]) {
     const language = langs.find((lang) => fileName.includes(lang))
     if (language) {
-        const languageStyled = languageStyledMap[language]
+        const languageStyled = languageStyledMap[language] || language
         return languageStyled
     }
-
+    return undefined
 }
 function getPattern(format: string) {
     if (format === 'po') {
@@ -69,17 +69,8 @@ async function run() {
             return []
     
         }
-        if (result) {
-            console.log('result', {
-                result: result?.data?.files
-                    ?.filter((fileData) => langFiles.includes(fileData.filename))
-                    ?.map((fileData) => ({
-                        fileName: fileData.filename,
-                        messages: getMessages(fileData?.patch || '')
-                    }))
-            })
-    
-            const messages = result?.data?.files?.map((fileData) => ({
+        if (result) {    
+            const messages = result?.data?.files?.filter((fileData) => langFiles.includes(fileData.filename)).map((fileData) => ({
                 fileName: fileData.filename,
                 messages: getMessages(fileData?.patch || '')
             }))
@@ -87,7 +78,7 @@ async function run() {
             console.log('messages',messages)
     
             const messagesToPrint = messages?.map(({ fileName, messages}) => {
-                const title = `| ${getLanguage(fileName, parsedLangs) || 'Unknown language'} |\n| --- |\n`
+                const title = `| Missing translations for: ${getLanguage(fileName, parsedLangs) || 'Unknown language'} |\n| --- |\n`
                 let content: string[] = []
                 messages?.forEach((message) => {
                     content.push(`| ${message} |`)
@@ -104,15 +95,6 @@ async function run() {
                 issue_number: +pullNumber,
                 body: comment || '',
               });
-    
-            gitHub.pulls.createReviewComment({
-                owner: githubOwner,
-                repo: githubRepo,
-                pull_number: +pullNumber,
-                body: comment || '',
-                in_reply_to: 1
-              });
-
 
               console.log('Comments are reviewed')
         } 
