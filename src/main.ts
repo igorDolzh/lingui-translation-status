@@ -37,16 +37,19 @@ function getPattern(format: string) {
 }
 async function run() {
     try {
+        console.log('RUN')
+        console.log(githubToken)
         const gitHub = await new Octokit({
             auth: githubToken
         })
-    
+        console.log('Github is ready')
         const result = await gitHub.repos.compareCommits({
             owner: githubOwner,
             repo: githubRepo,
             base: shaBase,
             head: shaHead
         })
+        console.log('Commits are compared')
         const parsedLangs = JSON.parse(langs)
         const langFiles = parsedLangs.map((lang: string) => filePath.replace(LANG_ISO_PLACEHOLDER, lang))
     
@@ -97,6 +100,7 @@ async function run() {
                 pull_number: +pullNumber,
                 body: comment || '',
               });
+              console.log('Comments are reviewed')
         } 
     } catch (e) {
         const errorMessage = `${e.name} ${e.message}`
