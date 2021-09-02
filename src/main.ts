@@ -22,7 +22,7 @@ const languageStyledMap: {[key: string]: string} = {
     de: 'German'
 }
 function getLanguage(fileName: string) {
-    var reg = new RegExp(filePath.replace(LANG_ISO_PLACEHOLDER, '(\w)'), 'g')
+    const reg = new RegExp(filePath.replace(LANG_ISO_PLACEHOLDER, '(\\w*)'))
     const language = fileName.match(reg)?.[1]
     if (language) {
         const languageStyled = languageStyledMap[language] || language
