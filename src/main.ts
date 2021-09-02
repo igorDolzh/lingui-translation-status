@@ -21,8 +21,9 @@ const languageStyledMap: {[key: string]: string} = {
     da: 'Danish',
     de: 'German'
 }
-function getLanguage(fileName: string, langs: string[]) {
-    const language = langs.find((lang) => fileName.includes(lang))
+function getLanguage(fileName: string) {
+    var reg = new RegExp(filePath.replace(LANG_ISO_PLACEHOLDER, '(\w)'), 'g')
+    const language = fileName.match(reg)?.[1]
     if (language) {
         const languageStyled = languageStyledMap[language] || language
         return languageStyled
@@ -77,8 +78,10 @@ async function run() {
             console.log('files', result?.data?.files)
             console.log('messages',messages)
     
-            const messagesToPrint = messages?.map(({ fileName, messages}) => {
-                const title = `| Missing translations for: ${getLanguage(fileName, parsedLangs) || 'Unknown language'} |\n| --- |\n`
+            const messagesToPrint = messages?.filter(({ messages }) => {
+                return messages ? messages?.length > 0 : false
+            })?.map(({ fileName, messages}) => {
+                const title = `| Missing translations for: ${getLanguage(fileName) || 'Unknown language'} |\n| --- |\n`
                 let content: string[] = []
                 messages?.forEach((message) => {
                     content.push(`| ${message} |`)
