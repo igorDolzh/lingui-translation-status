@@ -71,16 +71,20 @@ async function run() {
         }
         if (result) {
             console.log('result', {
-                result: result?.data?.files?.filter((fileData) => langFiles.includes(fileData.filename)).map((fileData) => ({
-                    fileName: fileData.filename,
-                    messages: getMessages(fileData?.patch || '')
-                }))
+                result: result?.data?.files
+                    ?.filter((fileData) => langFiles.includes(fileData.filename))
+                    ?.map((fileData) => ({
+                        fileName: fileData.filename,
+                        messages: getMessages(fileData?.patch || '')
+                    }))
             })
     
             const messages = result?.data?.files?.map((fileData) => ({
                 fileName: fileData.filename,
                 messages: getMessages(fileData?.patch || '')
             }))
+
+            console.log('messages',messages)
     
             const messagesToPrint = messages?.map(({ fileName, messages}) => {
                 const title = `| ${getLanguage(fileName, parsedLangs) || 'Unknown language'} |\n| --- |\n`
@@ -93,13 +97,23 @@ async function run() {
             })
     
             const comment = messagesToPrint?.join('\n\n')
+
+            gitHub.issues.createComment({
+                owner: githubOwner,
+                repo: githubRepo,
+                issue_number: +pullNumber,
+                body: comment || '',
+              });
     
             gitHub.pulls.createReviewComment({
                 owner: githubOwner,
                 repo: githubRepo,
                 pull_number: +pullNumber,
                 body: comment || '',
+                in_reply_to: 1
               });
+
+
               console.log('Comments are reviewed')
         } 
     } catch (e) {
