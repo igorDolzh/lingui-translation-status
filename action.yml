@@ -9,6 +9,7 @@ inputs:
     required: true
   file-path:
     description: The file path to find language files
+    required: true
   github-token:
     description: Github token
     required: true
@@ -26,6 +27,9 @@ inputs:
     required: true
   pull-number:
     description: Pull request number
+    required: true
+  file-langs:
+    description: List of languages
     required: true
 runs:
   using: "node12"

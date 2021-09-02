@@ -9,7 +9,7 @@ const githubRepo = ghCore.getInput("github-repo");
 const shaBase = ghCore.getInput("sha-base");
 const shaHead = ghCore.getInput("sha-head");
 const pullNumber = ghCore.getInput("pull-number");
-const langs =ghCore.getInput("file-langs");
+const langs = ghCore.getInput("file-langs");
 
 const LANG_ISO_PLACEHOLDER = "%LANG_ISO%";
 
