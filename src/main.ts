@@ -90,14 +90,34 @@ async function run() {
                 return title + content.join('\n')
             })
     
-            const comment = messagesToPrint?.join('\n\n')
+            const commentBody = messagesToPrint?.join('\n\n')
 
-            gitHub.issues.createComment({
+
+            const comments = await gitHub.issues.listComments({
                 owner: githubOwner,
                 repo: githubRepo,
                 issue_number: +pullNumber,
-                body: comment || '',
               });
+
+              console.log('comments',comments)
+
+            const comment = comments?.data?.find((comment) => comment?.user?.login === githubOwner)
+            if (comment) {
+                gitHub.issues.updateComment({
+                    owner: githubOwner,
+                    repo: githubRepo,
+                    issue_number: +pullNumber,
+                    body: commentBody || '',
+                    comment_id: comment.id
+                  });
+            } else {
+                gitHub.issues.createComment({
+                    owner: githubOwner,
+                    repo: githubRepo,
+                    issue_number: +pullNumber,
+                    body: commentBody || '',
+                  });
+            }
 
               console.log('Comments are reviewed')
         } 
