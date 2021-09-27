@@ -109,7 +109,6 @@ async function run() {
                 gitHub.issues.updateComment({
                     owner: githubOwner,
                     repo: githubRepo,
-                    issue_number: +pullNumber,
                     body: commentBody || '',
                     comment_id: comment.id
                   });
