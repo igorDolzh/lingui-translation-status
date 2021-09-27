@@ -89,8 +89,8 @@ async function run() {
     
                 return title + content.join('\n')
             })
-    
-            const commentBody = messagesToPrint?.join('\n\n')
+            const header = '### Translation status\n'
+            const commentBody = header + messagesToPrint?.join('\n\n')
 
 
             const comments = await gitHub.issues.listComments({
@@ -102,10 +102,9 @@ async function run() {
               
 
             const comment = comments?.data?.find((comment) => {
-                console.log(comment?.user, githubOwner)
-                return comment?.user?.login === githubOwner
+                return comment?.body?.startsWith(header)
             })
-            console.log('comment',comments)
+            console.log('comment',comment)
             if (comment) {
                 gitHub.issues.updateComment({
                     owner: githubOwner,
