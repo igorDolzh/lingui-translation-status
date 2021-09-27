@@ -106,12 +106,14 @@ async function run() {
             })
             console.log('comment',comment)
             if (comment) {
-                await gitHub.issues.updateComment({
+                console.log('inside the comment')
+                const result = await gitHub.issues.updateComment({
                     owner: githubOwner,
                     repo: githubRepo,
                     body: commentBody || '',
                     comment_id: comment.id
                   });
+                console.log('result', result)
             } else {
                 await gitHub.issues.createComment({
                     owner: githubOwner,
