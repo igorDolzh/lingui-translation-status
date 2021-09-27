@@ -106,14 +106,14 @@ async function run() {
             })
             console.log('comment',comment)
             if (comment) {
-                gitHub.issues.updateComment({
+                await gitHub.issues.updateComment({
                     owner: githubOwner,
                     repo: githubRepo,
                     body: commentBody || '',
                     comment_id: comment.id
                   });
             } else {
-                gitHub.issues.createComment({
+                await gitHub.issues.createComment({
                     owner: githubOwner,
                     repo: githubRepo,
                     issue_number: +pullNumber,
