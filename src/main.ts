@@ -99,9 +99,13 @@ async function run() {
                 issue_number: +pullNumber,
               });
 
-              console.log('comments',comments)
+              
 
-            const comment = comments?.data?.find((comment) => comment?.user?.login === githubOwner)
+            const comment = comments?.data?.find((comment) => {
+                console.log(comment?.user, githubOwner)
+                return comment?.user?.login === githubOwner
+            })
+            console.log('comment',comments)
             if (comment) {
                 gitHub.issues.updateComment({
                     owner: githubOwner,
