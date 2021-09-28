@@ -63,7 +63,7 @@ async function run() {
                 return extract
                     ?.map((text: string) => {
                         const matches = text.match(rex)
-                        return matches ? matches[1] : ''
+                        return matches ? matches[1] || matches[2] : ''
                     })
                     ?.filter((text: string) => Boolean(text))
             }
