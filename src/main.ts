@@ -43,7 +43,7 @@ async function run() {
         const gitHub = await new Octokit({
             auth: githubToken
         })
-
+        console.log('before compareDiff')
         const commitDiff = await gitHub.repos.compareCommits({
             owner: githubOwner,
             repo: githubRepo,
