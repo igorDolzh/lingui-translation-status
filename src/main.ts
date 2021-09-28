@@ -32,7 +32,7 @@ function getLanguage(fileName: string) {
 }
 function getPattern(format: string) {
     if (format === 'po') {
-        return /msgid "([\w ]*)".*\n\+msgstr.""/
+        return /\+msgid "([\w ]*)".*\n\+msgstr.""|msgid "([\w ]*)".*\n\-msgstr "[\w ]*".*\n\+msgstr.""/
     }
     return null
 }
@@ -75,7 +75,7 @@ async function run() {
                 fileName: fileData.filename,
                 messages: getMessages(fileData?.patch || '')
             }))
-            console.log('result?.data?.files', result?.data?.files)
+            console.log('files', result?.data?.files)
             console.log('messages',messages)
     
             const messagesToPrint = messages?.filter(({ messages }) => {
@@ -98,6 +98,8 @@ async function run() {
                 repo: githubRepo,
                 issue_number: +pullNumber,
               });
+
+              
 
             const comment = comments?.data?.find((comment) => {
                 return comment?.body?.startsWith(header)
