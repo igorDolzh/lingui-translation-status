@@ -32,7 +32,7 @@ function getLanguage(fileName: string) {
 }
 function getPattern(format: string) {
     if (format === 'po') {
-        return /\+msgid "([\w ]*)".*\\n\+msgstr.""/
+        return /msgid "([\w ]*)".*\n\+msgstr.""/
     }
     return null
 }
