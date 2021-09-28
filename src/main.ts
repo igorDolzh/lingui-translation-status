@@ -75,6 +75,7 @@ async function run() {
                 fileName: fileData.filename,
                 messages: getMessages(fileData?.patch || '')
             }))
+            console.log('result?.data?.files', result?.data?.files)
             console.log('messages',messages)
     
             const messagesToPrint = messages?.filter(({ messages }) => {
