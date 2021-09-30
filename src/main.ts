@@ -44,11 +44,10 @@ async function run() {
             auth: githubToken
         })
         console.log('before compareDiff')
-        const commitDiff = await gitHub.repos.compareCommits({
+        const commitDiff = await gitHub.repos.compareCommitsWithBasehead({
             owner: githubOwner,
             repo: githubRepo,
-            base: shaBase,
-            head: shaHead
+            basehead: `${shaBase}...${shaHead}`
         })
         console.log('commitDiff',commitDiff)
 
